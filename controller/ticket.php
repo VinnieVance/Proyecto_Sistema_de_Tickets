@@ -12,7 +12,7 @@
     switch($_GET["op"]){
 
         case "insert":
-            $datos=$ticket->insert_ticket($_POST["usu_id"],$_POST["cat_id"],$_POST["cats_id"],$_POST["tick_titulo"],$_POST["tick_descrip"]);
+            $datos=$ticket->insert_ticket($_POST["usu_id"],$_POST["cat_id"],$_POST["cats_id"],$_POST["tick_titulo"],$_POST["tick_descrip"],$_POST["prio_id"]);
             if(is_array($datos)==true and count($datos)>0){
                 foreach ($datos as $row){
                     $output["tick_id"] = $row["tick_id"];
@@ -64,6 +64,7 @@
                 $sub_array[] = $row["tick_id"];
                 $sub_array[] = $row["cat_nom"];
                 $sub_array[] = $row["tick_titulo"];
+                $sub_array[] = $row["prio_nom"];
 
                 if($row["tick_estado"]=='Abierto'){
                     $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
@@ -77,6 +78,12 @@
                     $sub_array[] = '<span class="label label-pill label-default">Sin asignar</span>';
                 }else{
                     $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"]==null){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin cerrar</span>';
+                }else{
+                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
                 }
 
                 if($row["usu_asig"]==null){
@@ -107,6 +114,7 @@
                 $sub_array[] = $row["tick_id"];
                 $sub_array[] = $row["cat_nom"];
                 $sub_array[] = $row["tick_titulo"];
+                $sub_array[] = $row["prio_nom"];
                 
                 if($row["tick_estado"]=='Abierto'){
                     $sub_array[] = '<span class="label label-pill label-success">Abierto</span>';
@@ -120,6 +128,12 @@
                     $sub_array[] = '<span class="label label-pill label-default">Sin asignar</span>';
                 }else{
                     $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_asig"]));
+                }
+
+                if($row["fech_cierre"]==null){
+                    $sub_array[] = '<span class="label label-pill label-default">Sin cerrar</span>';
+                }else{
+                    $sub_array[] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
                 }
 
                 if($row["usu_asig"]==null){
@@ -180,6 +194,41 @@
                                                 <p>
                                                     <?php echo $row['tickd_descrip'];?>
                                                 </p>
+
+                                                <br>
+
+                                                <?php
+                                                    $datos_det = $documento->get_documento_detalle_x_ticketd($row["tickd_id"]);
+                                                    if (is_array($datos_det)==true and count($datos_det)>0){
+                                                        ?>
+                                                            <p><strong>Documentos Adicionales</strong></p>
+                                                            <p>
+                                                                <table class="table table-bordered table-striped table-vcenter js-dataTable-fulll">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 60%;">Nombre</th>
+                                                                            <th style="width: 40%;"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php
+                                                                            foreach($datos_det as $row_det){
+                                                                        ?>
+                                                                            <tr>
+                                                                                <td><?php echo $row_det["det_nom"]; ?></td>
+                                                                                <td>
+                                                                                    <a href="../../public/document_detalle/<?php echo $row_det["tickd_id"] ?>/<?php echo $row_det["det_nom"] ?>" target="_blank" class="btn btn-inline btn-primary btn-sm">Ver</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        <?php
+                                                                            }
+                                                                        ?>
+                                                                    </tbody>
+                                                                </table>    
+                                                            </p>
+                                                        <?php
+                                                    }
+                                                ?>
                                             </div>
                                         </div>
                                     </section>
@@ -211,19 +260,54 @@
                     $output["tick_estado_texto"] = $row["tick_estado"];
 
                     $output["fech_crea"] = date("d/m/Y H:i:s", strtotime($row["fech_crea"]));
+                    $output["fech_cierre"] = date("d/m/Y H:i:s", strtotime($row["fech_cierre"]));
                     $output["usu_nom"] = $row["usu_nom"];
                     $output["usu_ape"] = $row["usu_ape"];
                     $output["cat_nom"] = $row["cat_nom"];
                     $output["cats_nom"] = $row["cats_nom"];
                     $output["tick_estre"] = $row["tick_estre"];
                     $output["tick_coment"] = $row["tick_coment"];
+                    $output["prio_nom"] = $row["prio_nom"];
                 }
                 echo json_encode($output);
             }   
         break;
 
         case "insertdetalle":
-            $ticket->insert_ticketdetalle($_POST["tick_id"],$_POST["usu_id"],$_POST["tickd_descrip"]);
+            $datos = $ticket->insert_ticketdetalle($_POST["tick_id"],$_POST["usu_id"],$_POST["tickd_descrip"]);
+            if (is_array($datos)==true and count($datos)>0){
+                foreach ($datos as $row){
+                    /* Obtener tickd_id de $datos */
+                    $output["tickd_id"] = $row["tickd_id"];
+                    /* Consultamos si vienen archivos desde la vista */
+                    if (empty($_FILES['files']['name'])){
+
+                    }else{
+                        /* Contar registros */
+                        $countfiles = count($_FILES['files']['name']);
+                        /* Ruta de los documentos */
+                        $ruta = "../public/document_detalle/".$output["tickd_id"]."/";
+                        /* Crear un array de todos los archivos */
+                        $files_arr = array();
+                        /* Consultar si la ruta existe, en caso de que no, se crea */
+                        if(!file_exists($ruta)){
+                            mkdir($ruta, 0777, true);
+                        }
+
+                        /* Recorrer todos los registros */
+                        for($index = 0; $index < $countfiles; $index++){
+                            $doc1 = $_FILES['files']['tmp_name'][$index];
+                            $destino = $ruta.$_FILES['files']['name'][$index];
+
+                            $documento->insert_documento_detalle($output["tickd_id"], $_FILES['files']['name'][$index]);
+
+                            move_uploaded_file($doc1, $destino);
+                        }
+
+                    }
+                }
+            }
+            echo json_encode($datos);
         break;    
         /* Muestra el total de tickets */
         case "total";

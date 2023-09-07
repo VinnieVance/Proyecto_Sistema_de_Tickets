@@ -54,7 +54,7 @@
 
 						<div class="col-lg-6"> <!-- selector de categoria para el ticket -->
 							<fieldset class="form-group">
-								<label class="form-label semibold" for="exampleInput">Categoría</label>
+								<label class="form-label semibold" for="cat_id">Categoría</label>
 								<select id="cat_id" name="cat_id" class="form-control" data-placeholder="Seleccionar">
 									
 								</select>
@@ -63,7 +63,7 @@
 
 						<div class="col-lg-6"> <!-- selector de subcategoria para el ticket -->
 							<fieldset class="form-group">
-								<label class="form-label semibold" for="exampleInput">SubCategoría</label>
+								<label class="form-label semibold" for="cats_id">SubCategoría</label>
 								<select id="cats_id" name="cats_id" class="form-control" data-placeholder="Seleccionar">
 									<option label="Seleccionar"></option>
 								</select>
@@ -72,7 +72,7 @@
 
 						<div class="col-lg-6"> <!-- selector de prioridad para el ticket -->
 							<fieldset class="form-group">
-								<label class="form-label semibold" for="exampleInput">Prioridad</label>
+								<label class="form-label semibold" for="prio_id">Prioridad</label>
 								<select id="prio_id" name="prio_id" class="form-control" data-placeholder="Seleccionar">
 									<option label="Seleccionar"></option>
 								</select>
@@ -81,7 +81,7 @@
 
 						<div class="col-lg-6"> <!-- Boton para subir documentos al ticket -->
 							<fieldset class="form-group">
-								<label class="form-label semibold" for="exampleInput">Documentos Adicionales</label>
+								<label class="form-label semibold" for="fileElem">Documentos Adicionales</label>
 								<input type="file" name="fileElem" id="fileElem" class="form-control" multiple>
 							</fieldset>
 						</div>

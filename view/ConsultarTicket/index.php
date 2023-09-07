@@ -41,9 +41,11 @@
 							<th style="width: 5%;">No. Ticket</th>
 							<th style="width: 15%;">Categoría</th>
 							<th class="d-none d-sm-table-cell" style="width: 40%;">Título</th>
+							<th class="d-none d-sm-table-cell" style="width: 5%;">Prioridad</th>
 							<th class="d-none d-sm-table-cell" style="width: 5%;">Estado</th>
 							<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha de Creación</th>
 							<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha de Asignación</th>
+							<th class="d-none d-sm-table-cell" style="width: 10%;">Fecha de Cierre</th>
 							<th class="d-none d-sm-table-cell" style="width: 10%;">Soporte</th>
 							<th class="text-center" style="width: 5%;"></th>
 						</tr>
