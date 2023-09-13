@@ -1,4 +1,5 @@
 <?php
+	/* Rol 1 de usuario */
 	if ($_SESSION["rol_id"]==1){
 		?>
 			<nav class="side-menu">
@@ -24,28 +25,54 @@
 				</ul>
 			</nav><!--.side-menu-->
 		<?php
+	/* Rol de soporte */
 	}else{
 		?>
 			<nav class="side-menu">
 				<ul class="side-menu-list">
+
 					<li class="blue-dirty">
 						<a href="..\Home\">
 							<span class="font-icon font-icon-home"></span>
 							<span class="lbl">Inicio</span>
 						</a>
 					</li>
-					<li class="blue-dirty">
-						<a href="..\MntUsuario\">
-							<span class="glyphicon glyphicon-th"></span>
-							<span class="lbl">Mantenimiento Usuario</span>
-						</a>
-					</li>
+
 					<li class="blue-dirty">
 						<a href="..\ConsultarTicket\">
 							<span class="glyphicon glyphicon-th"></span>
 							<span class="lbl">Consultar Ticket</span>
 						</a>
 					</li>
+
+					<li class="blue-dirty">
+						<a href="..\MntUsuario\">
+							<span class="glyphicon glyphicon-th"></span>
+							<span class="lbl">Mant. Usuario</span>
+						</a>
+					</li>
+
+					<li class="blue-dirty">
+						<a href="..\MntPrioridad\">
+							<span class="glyphicon glyphicon-th"></span>
+							<span class="lbl">Mant. Prioridad</span>
+						</a>
+					</li>
+
+					<li class="blue-dirty">
+						<a href="..\MntCategoria\">
+							<span class="glyphicon glyphicon-th"></span>
+							<span class="lbl">Mant. Categoría</span>
+						</a>
+					</li>
+
+					<li class="blue-dirty">
+						<a href="..\MntSubCategoria\">
+							<span class="glyphicon glyphicon-th"></span>
+							<span class="lbl">Mant. Sub Categoría</span>
+						</a>
+					</li>
+
 				</ul>
 			</nav><!--.side-menu-->
 		<?php

@@ -10,7 +10,7 @@ function guardaryeditar(e){
     e.preventDefault(); /* Para evitar doble click */
 	var formData = new FormData($("#usuario_form")[0]);
     $.ajax({
-        url: "../../controller/usuario.php?op=guardaryeditar",
+        url: "../../controller/subcategoria.php?op=guardaryeditar",
         type: "POST",
         data: formData,
         contentType: false,
@@ -32,6 +32,11 @@ function guardaryeditar(e){
 }
 
 $(document).ready(function(){
+
+    $.post("../../controller/categoria.php?op=combo",function(data, status){
+        $('#cat_id').html(data);
+    });
+
     tabla=$('#usuario_data').dataTable({
         "aProcessing": true,
         "aServerSide": true,
@@ -46,7 +51,7 @@ $(document).ready(function(){
                 'pdfHtml5'
                 ],
         "ajax":{
-            url: '../../controller/usuario.php?op=listar',
+            url: '../../controller/subcategoria.php?op=listar',
             type : "post",
             dataType : "json",						
             error: function(e){
@@ -85,25 +90,22 @@ $(document).ready(function(){
     }).DataTable(); 
 });
 
-//Función para editar usuario
-function editar(usu_id){
+//Función para editar subcategoria
+function editar(cats_id){
     $('#mdltitulo').html('Editar Registro');
 
-    $.post("../../controller/usuario.php?op=mostrar", {usu_id : usu_id}, function (data) {
+    $.post("../../controller/subcategoria.php?op=mostrar", {cats_id : cats_id}, function (data) {
         data = JSON.parse(data);
-        $('#usu_id').val(data.usu_id);
-        $('#usu_nom').val(data.usu_nom);
-        $('#usu_ape').val(data.usu_ape);
-        $('#usu_correo').val(data.usu_correo);
-        $('#usu_pass').val(data.usu_pass);
-        $('#rol_id').val(data.rol_id).trigger('change'); /* Trigger especifico para el Select2 */
+        $('#cats_id').val(data.cats_id);
+        $('#cat_id').val(data.cat_id).trigger('change');
+        $('#cats_nom').val(data.cats_nom);
     }); 
 
     $('#modalmantenimiento').modal('show');
 }
 
-//Funcion para eliminar usuario
-function eliminar(usu_id){
+//Funcion para eliminar subcategoria
+function eliminar(cats_id){
     swal({
         title: "¡Advertencia!",
         text: "¿Esta seguro de eliminar el registro?",
@@ -116,7 +118,7 @@ function eliminar(usu_id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            $.post("../../controller/usuario.php?op=eliminar", {usu_id : usu_id}, function (data) {
+            $.post("../../controller/subcategoria.php?op=eliminar", {cats_id : cats_id}, function (data) {
 
             }); 
 
@@ -132,9 +134,10 @@ function eliminar(usu_id){
     });
 }
 
-/* Boton para crear nuevo usuario */
+/* Boton para crear nuevo subcategoria */
 $(document).on("click","#btnnuevo", function(){
-    $('#usu_id').val('');
+    $('#cats_id').val('');
+    $('#cat_id').val('').trigger('change');
     $('#mdltitulo').html('Nuevo Registro');
     $('#usuario_form')[0].reset();
     $('#modalmantenimiento').modal('show');

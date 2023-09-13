@@ -10,7 +10,7 @@ function guardaryeditar(e){
     e.preventDefault(); /* Para evitar doble click */
 	var formData = new FormData($("#usuario_form")[0]);
     $.ajax({
-        url: "../../controller/usuario.php?op=guardaryeditar",
+        url: "../../controller/categoria.php?op=guardaryeditar",
         type: "POST",
         data: formData,
         contentType: false,
@@ -46,7 +46,7 @@ $(document).ready(function(){
                 'pdfHtml5'
                 ],
         "ajax":{
-            url: '../../controller/usuario.php?op=listar',
+            url: '../../controller/categoria.php?op=listar',
             type : "post",
             dataType : "json",						
             error: function(e){
@@ -86,24 +86,20 @@ $(document).ready(function(){
 });
 
 //Función para editar usuario
-function editar(usu_id){
+function editar(cat_id){
     $('#mdltitulo').html('Editar Registro');
 
-    $.post("../../controller/usuario.php?op=mostrar", {usu_id : usu_id}, function (data) {
+    $.post("../../controller/categoria.php?op=mostrar", {cat_id : cat_id}, function (data) {
         data = JSON.parse(data);
-        $('#usu_id').val(data.usu_id);
-        $('#usu_nom').val(data.usu_nom);
-        $('#usu_ape').val(data.usu_ape);
-        $('#usu_correo').val(data.usu_correo);
-        $('#usu_pass').val(data.usu_pass);
-        $('#rol_id').val(data.rol_id).trigger('change'); /* Trigger especifico para el Select2 */
+        $('#cat_id').val(data.cat_id);
+        $('#cat_nom').val(data.cat_nom);
     }); 
 
     $('#modalmantenimiento').modal('show');
 }
 
-//Funcion para eliminar usuario
-function eliminar(usu_id){
+//Funcion para eliminar categoria
+function eliminar(cat_id){
     swal({
         title: "¡Advertencia!",
         text: "¿Esta seguro de eliminar el registro?",
@@ -116,7 +112,7 @@ function eliminar(usu_id){
     },
     function(isConfirm) {
         if (isConfirm) {
-            $.post("../../controller/usuario.php?op=eliminar", {usu_id : usu_id}, function (data) {
+            $.post("../../controller/categoria.php?op=eliminar", {cat_id : cat_id}, function (data) {
 
             }); 
 
@@ -134,7 +130,7 @@ function eliminar(usu_id){
 
 /* Boton para crear nuevo usuario */
 $(document).on("click","#btnnuevo", function(){
-    $('#usu_id').val('');
+    $('#cat_id').val('');
     $('#mdltitulo').html('Nuevo Registro');
     $('#usuario_form')[0].reset();
     $('#modalmantenimiento').modal('show');

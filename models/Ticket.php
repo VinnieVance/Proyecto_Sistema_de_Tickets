@@ -283,6 +283,7 @@
             return $resultado=$sql->fetchAll();
         }
 
+        /* Consulta para insertar datos de la encuesta de ticket */
         public function insert_encuesta($tick_id, $tick_estre, $tick_coment){
             $conectar= parent::conexion();
             parent::set_names();
@@ -296,6 +297,19 @@
             $sql->bindValue(1, $tick_estre);
             $sql->bindValue(2, $tick_coment);
             $sql->bindValue(3, $tick_id);
+            $sql->execute();
+            return $resultado=$sql->fetchAll();
+        }
+
+        /* Consulta para filtrar tickets */
+        public function filtrar_ticket($tick_titulo, $cat_id, $prio_id){
+            $conectar = parent::conexion();
+            parent::set_names();
+            $sql="call filtrar_ticket (?,?,?)";
+            $sql=$conectar->prepare($sql);
+            $sql->bindValue(1, "%".$tick_titulo."%");
+            $sql->bindValue(2, $cat_id);
+            $sql->bindValue(3, $prio_id);
             $sql->execute();
             return $resultado=$sql->fetchAll();
         }
