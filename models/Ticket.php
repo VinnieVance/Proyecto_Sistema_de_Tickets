@@ -71,6 +71,7 @@
                 tm_ticket.fech_cierre,
                 tm_ticket.tick_estre,
                 tm_ticket.tick_coment,
+                tm_ticket.usu_asig,
                 tm_usuario.usu_nom,
                 tm_usuario.usu_ape,
                 tm_usuario.usu_correo,
@@ -148,7 +149,36 @@
         public function insert_ticketdetalle($tick_id,$usu_id,$tickd_descrip){
             $conectar= parent::conexion();
             parent::set_names();
-                $sql="INSERT INTO td_ticketdetalle 
+            /* Si ROL = 1, se envia la alerta para el usuario de soporte */
+            
+            if($_SESSION["rol_id"]==1){
+                /* Obtener usuario asignado al ticket */
+                $ticket = new Ticket();
+                $datos = $ticket->listar_ticket_x_id($tick_id);
+                foreach ($datos as $row){
+                    $usu_asig = $row["usu_asig"];
+                }
+        
+                /* Guardar notificacion de nuevo comentario en la BD */
+                $sql0="INSERT INTO tm_notificacion
+                (not_id, usu_id, not_mensaje, tick_id, est)
+                VALUES (null, $usu_asig,'Tiene una nueva respuesta del usuario del ticket No.:',?,2)";
+                $sql0=$conectar->prepare($sql0);
+                $sql0->bindValue(1, $tick_id);
+                $sql0->execute();
+            /* Si ROL = 1, se envia la alerta para el usuario que genero el ticket  */   
+            }else{
+                /* Guardar notificacion de nuevo comentario en la BD */
+                $sql0="INSERT INTO tm_notificacion
+                (not_id, usu_id, not_mensaje, tick_id, est)
+                VALUES (null, ?,'Tiene una nueva respuesta del soporte en su ticket No.:',?,2)";
+                $sql0=$conectar->prepare($sql0);
+                $sql0->bindValue(1, $usu_id);
+                $sql0->bindValue(2, $tick_id);
+                $sql0->execute();
+            }
+
+            $sql="INSERT INTO td_ticketdetalle 
                 (tickd_id,tick_id,usu_id,tickd_descrip,fech_crea,est) 
                 VALUES (NULL,?,?,?,now(),'1');";
             $sql=$conectar->prepare($sql);
@@ -156,6 +186,7 @@
             $sql->bindValue(2, $usu_id);
             $sql->bindValue(3, $tickd_descrip);
             $sql->execute();
+            
             /* Devuelve el último ID ingresado (identity) */
             $sql1="SELECT LAST_INSERT_ID() AS 'tickd_id';";
             $sql1=$conectar->prepare($sql1);
@@ -233,7 +264,16 @@
             $sql->bindValue(1, $usu_asig);
             $sql->bindValue(2, $tick_id);
             $sql->execute();
-            return $resultado=$sql->fetchAll();
+            /* Guardar notificacion en la BD */
+            $sql1="INSERT INTO tm_notificacion
+            (not_id, usu_id, not_mensaje, tick_id, est)
+            VALUES (null,?,'Se le ha asignado el ticket No.:',?,2)";
+            $sql1=$conectar->prepare($sql1);
+            $sql1->bindValue(1, $usu_asig);
+            $sql1->bindValue(2, $tick_id);
+            $sql1->execute();
+
+            return $resultado=$sql1->fetchAll();
         }
 
         /* Obtener el total de tickets */

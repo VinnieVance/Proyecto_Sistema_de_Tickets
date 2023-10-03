@@ -5,6 +5,7 @@ function init(){
 }
 
 $(document).ready(function() {
+    /* TODO: Inicializar SummerNote */
     $('#tick_descrip').summernote({
         height: 150,
         lang: "es-ES",
@@ -31,19 +32,19 @@ $(document).ready(function() {
             ['height', ['height']]
           ]
     });
-
+    /* TODO: Llenar Combo categoria */
     $.post("../../controller/categoria.php?op=combo",function(data, status){
         $('#cat_id').html(data);
     });
 
     $("#cat_id").change(function(){
         cat_id = $(this).val();
-        
+        /* TODO: llenar Combo subcategoria segun cat_id */
         $.post("../../controller/subcategoria.php?op=combo", {cat_id : cat_id}, function (data, status) {
             $("#cats_id").html(data);
         });
     });
-
+    /* TODO: Llenar combo Prioridad  */
     $.post("../../controller/prioridad.php?op=combo",function(data, status){
         $('#prio_id').html(data);
     });
