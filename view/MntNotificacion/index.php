@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <?php require_once("../MainHead/head.php");?>
-	<title>UAEM Sistema de Tickets::Mantenimiento SubCategoría</title>
+	<title>UAEM Sistema de Tickets::Notificaciones</title>
 </head>
 <body class="with-side-menu">
 
@@ -23,10 +23,10 @@
 				<div class="tbl">
 					<div class="tbl-row">
 						<div class="tbl-cell">
-							<h3>Mantenimiento Sub Categoría</h3>
+							<h3>Notificaciones</h3>
 							<ol class="breadcrumb breadcrumb-simple">
 								<li><a href="..\Home\">Inicio</a></li>
-								<li class="active">Mantenimiento Sub Categoría</li>
+								<li class="active">Notificaciones</li>
 							</ol>
 						</div>
 					</div>
@@ -34,13 +34,10 @@
 			</header>
 
 			<div class="box-typical box-typical-padding">
-				<button type="button" id="btnnuevo" class="btn btn-inline btn-primary">Nuevo Registro</button>
-				<table id="usuario_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
+				<table id="notificacion_data" class="table table-bordered table-striped table-vcenter js-dataTable-full">
 					<thead>
 						<tr>
-							<th style="width: 10%;">Categoría</th>
-							<th style="width: 10%;">Sub Categoría</th>
-							<th class="text-center" style="width: 5%;"></th>
+							<th style="width: 75%;">Notificación</th>
 							<th class="text-center" style="width: 5%;"></th>
 						</tr>
 					</thead>
@@ -53,14 +50,12 @@
 		</div>
 	</div>
 	<!-- Contenido -->
-	<!-- Llamada del modal -->
-	<?php require_once("modalmantenimiento.php");?>
 
 	<?php require_once("../MainJs/js.php");?>
 	
-	<script type="text/javascript" src="mntsubcategoria.js"></script>
+	<script type="text/javascript" src="mntnotificacion.js"></script>
 
-	<script type="text/javascript" src="../notificacion.js"></script>
+    <script type="text/javascript" src="../notificacion.js"></script>
 
 </body>
 </html>

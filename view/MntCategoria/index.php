@@ -59,6 +59,8 @@
 	
 	<script type="text/javascript" src="mntcategoria.js"></script>
 
+	<script type="text/javascript" src="../notificacion.js"></script>
+
 </body>
 </html>
 <?php

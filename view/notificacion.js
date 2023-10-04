@@ -6,11 +6,33 @@ $(document).ready(function(){
 
 function mostrar_notificacion(){
 
-    $.notify({
-        icon:'glyphicon glyphicon-star',
-        message: "Tiene una nueva respuesta de ticket Nro : ##", 
-        url: "http://sistema-de-tickets.com"
+    var formData = new FormData();
+    formData.append('usu_id',$('#user_idx').val());
+
+    $.ajax({
+        url: "../../controller/notificacion.php?op=mostrar",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(data){
+            if (data==''){
+
+            }else{
+                data = JSON.parse(data);
+                $.notify({
+                    icon: 'glyphicon glyphicon-star',
+                    message: data.not_mensaje,
+                    url: "http://localhost:80/Proyecto Sistema de Tickets/view/DetalleTicket/?ID="+data.tick_id
+                });
+
+                $.post("../../controller/notificacion.php?op=actualizar", {not_id : data.not_id}, function (data) {
+
+                });
+            }
+        }
     });
+
 }
 
 setInterval(function(){
