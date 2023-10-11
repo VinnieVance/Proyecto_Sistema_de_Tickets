@@ -9,6 +9,7 @@ $(document).ready(function(){
         "searching": true,
         lengthChange: false,
         colReorder: true,
+        "order": [ 1, 'asc' ],
         buttons: [		          
                 'copyHtml5',
                 'excelHtml5',

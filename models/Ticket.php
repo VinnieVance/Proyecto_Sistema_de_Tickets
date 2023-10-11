@@ -162,16 +162,16 @@
             if($_SESSION["rol_id"]==1){
                 /* Guardar notificacion de nuevo comentario en la BD */
                 $sql0="INSERT INTO tm_notificacion
-                (not_id, usu_id, not_mensaje, tick_id, est)
-                VALUES (null, $usu_asig,'Tiene una nueva respuesta del usuario del ticket No.: ',$tick_id,2)";
+                (not_id, usu_id, not_mensaje, not_fech, tick_id, est)
+                VALUES (null, $usu_asig,'Tiene una nueva respuesta del usuario del ticket No.: ', now(), $tick_id, 2)";
                 $sql0=$conectar->prepare($sql0);
                 $sql0->execute();
             /* Si ROL = 1, se envia la alerta para el usuario que genero el ticket  */   
             }else{
                 /* Guardar notificacion de nuevo comentario en la BD */
                 $sql0="INSERT INTO tm_notificacion
-                (not_id, usu_id, not_mensaje, tick_id, est)
-                VALUES (null, $usu_crea,'Tiene una nueva respuesta del soporte en su ticket No.: ',$tick_id,2)";
+                (not_id, usu_id, not_mensaje, not_fech, tick_id, est)
+                VALUES (null, $usu_crea,'Tiene una nueva respuesta del soporte en su ticket No.: ', now(), $tick_id, 2)";
                 $sql0=$conectar->prepare($sql0);
                 $sql0->execute();
             }
@@ -264,8 +264,8 @@
             $sql->execute();
             /* Guardar notificacion en la BD */
             $sql1="INSERT INTO tm_notificacion
-            (not_id, usu_id, not_mensaje, tick_id, est)
-            VALUES (null,?,'Se le ha asignado el ticket No.: ',?,2)";
+            (not_id, usu_id, not_mensaje, not_fech, tick_id, est)
+            VALUES (null, ?, 'Se le ha asignado el ticket No.: ', now(), ?, 2)";
             $sql1=$conectar->prepare($sql1);
             $sql1->bindValue(1, $usu_asig);
             $sql1->bindValue(2, $tick_id);

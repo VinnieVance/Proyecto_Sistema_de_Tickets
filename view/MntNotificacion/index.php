@@ -38,6 +38,7 @@
 					<thead>
 						<tr>
 							<th style="width: 75%;">Notificación</th>
+							<th style="width: 20%;">Fecha</th>
 							<th class="text-center" style="width: 5%;"></th>
 						</tr>
 					</thead>
