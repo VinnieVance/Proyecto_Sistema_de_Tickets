@@ -127,6 +127,15 @@
 
 					<div class="col-lg-12">
 						<button type="button" id="btnenviar" class="btn btn-rounded btn-inline btn-success">Enviar</button>
+						<!-- Mostrar el boton para el uso de ChatGPT solo para usuarios de soporte -->
+						<?php
+							if($_SESSION["rol_id"]==2){
+								?>
+									<button type="button" id="btnchatgpt" class="btn btn-rounded btn-inline btn-default">ChatGPT</button>
+								<?php
+							}
+						?>
+
 						<button type="button" id="btncerrarticket" class="btn btn-rounded btn-inline btn-danger">Cerrar Ticket</button>
 					</div>
 				</div>
