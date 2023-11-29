@@ -3,9 +3,39 @@ function init(){
 }
 
 $(document).ready(function(){
-    var tick_id = getUrlParameter('ID');
 
-    listardetalle(tick_id);
+    /* var tick_id = getUrlParameter('ID'); */
+
+    const url = window.location.href;
+    const params = new URLSearchParams(new URL(url).search);
+    const tick_id = params.get("ID");
+    /* Para corregir el error de eliminación del simbolo + */
+    const decoded_id = decodeURIComponent(tick_id);
+    const id = decoded_id.replace(/\s/g, '+');
+
+    $.post("../../controller/ticket.php?op=listardetalle", { tick_id : id }, function (data) {
+        $('#lbldetalle').html(data);
+    });
+
+    $.post("../../controller/ticket.php?op=mostrar", { tick_id : id }, function (data) {
+        data = JSON.parse(data);
+        $('#lblestado').html(data.tick_estado);
+        $('#lblnomusuario').html(data.usu_nom +' '+data.usu_ape);
+        $('#lblfechcrea').html(data.fech_crea);
+
+        $('#lblnomidticket').html("Detalle Ticket - "+data.tick_id);
+
+        $('#cat_nom').val(data.cat_nom);
+        $('#cats_nom').val(data.cats_nom);
+        $('#tick_titulo').val(data.tick_titulo);
+        $('#tickd_descripusu').summernote ('code',data.tick_descrip);
+        $('#prio_nom').val(data.prio_nom);
+        
+        if (data.tick_estado_texto == "Cerrado"){
+            $('#pnldetalle').hide();
+        }
+        
+    });
     
     //Summernote para escribir en el chat
     $('#tickd_descrip').summernote({
@@ -203,30 +233,5 @@ $(document).on("click","#btnchatgpt", function(){
     });
 });
 
-function listardetalle(tick_id){
-    $.post("../../controller/ticket.php?op=listardetalle", { tick_id : tick_id }, function (data) {
-        $('#lbldetalle').html(data);
-    });
-
-    $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
-        data = JSON.parse(data);
-        $('#lblestado').html(data.tick_estado);
-        $('#lblnomusuario').html(data.usu_nom +' '+data.usu_ape);
-        $('#lblfechcrea').html(data.fech_crea);
-
-        $('#lblnomidticket').html("Detalle Ticket - "+data.tick_id);
-
-        $('#cat_nom').val(data.cat_nom);
-        $('#cats_nom').val(data.cats_nom);
-        $('#tick_titulo').val(data.tick_titulo);
-        $('#tickd_descripusu').summernote ('code',data.tick_descrip);
-        $('#prio_nom').val(data.prio_nom);
-        
-        if (data.tick_estado_texto == "Cerrado"){
-            $('#pnldetalle').hide();
-        }
-        
-    });
-} 
 
 init();

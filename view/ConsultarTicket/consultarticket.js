@@ -138,9 +138,10 @@ $(document).ready(function(){
 
 });
 
-function ver(tick_id){
-    window.open('http://localhost:80/Proyecto Sistema de Tickets/view/DetalleTicket/?ID='+ tick_id +'','_self');
-}
+$(document).on("click",".btn-inline",function(){
+    const ciphertext = $(this).data("ciphertext");
+    window.open('http://localhost:80/Proyecto Sistema de Tickets/view/DetalleTicket/?ID='+ ciphertext +'','_self');
+});
 
 function asignar(tick_id){
     $.post("../../controller/ticket.php?op=mostrar", {tick_id : tick_id}, function(data) {

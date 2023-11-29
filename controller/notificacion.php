@@ -4,6 +4,10 @@
     require_once("../models/Notificacion.php");
     $notificacion = new Notificacion();
 
+    $key = "ll4v#s7St3m45ioC0%$";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     /* opciones del controlador */
     switch($_GET["op"]){
         
@@ -35,7 +39,11 @@
                 $sub_array = array();
                 $sub_array[] = $row["not_mensaje"] . ' ' . $row["tick_id"];
                 $sub_array[] = $row["not_fech"];
-                $sub_array[] = '<button type="button" onClick="ver('.$row["tick_id"].');"  id="'.$row["tick_id"].'" class="btn btn-inline btn-info btn-sm ladda-button"><i class="fa fa-eye"></i></button>';
+
+                $cifrado = openssl_encrypt($row["tick_id"],$cipher,$key, OPENSSL_RAW_DATA,$iv);
+                $textoCifrado  = base64_encode($iv . $cifrado);
+
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-info btn-sm ladda-button"><div><i class="fa fa-eye"></i></div></button>';
                 $data[] = $sub_array;
             }
 

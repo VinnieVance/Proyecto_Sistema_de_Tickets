@@ -57,6 +57,8 @@ $(document).ready(function(){
     }).DataTable(); 
 });
 
-function ver(tick_id){
-    window.open('http://localhost:80/Proyecto Sistema de Tickets/view/DetalleTicket/?ID='+ tick_id +'','_self');
-}
+/* Para poder ver el detalle de ticket al dar click a la notificacion */
+$(document).on("click",".btn-inline",function(){
+    const ciphertext = $(this).data("ciphertext");
+    window.open('http://localhost:80/Proyecto Sistema de Tickets/view/DetalleTicket/?ID='+ ciphertext +'','_self');
+});

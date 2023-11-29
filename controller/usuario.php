@@ -3,6 +3,10 @@
     require_once("../models/Usuario.php");
     $usuario = new Usuario();
 
+    $key = "ll4v#s7St3m45ioC0%$";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     switch($_GET["op"]){
         //Crear o actualizar usuario
         case "guardaryeditar":
@@ -56,7 +60,12 @@
                     $output["usu_nom"] = $row["usu_nom"];
                     $output["usu_ape"] = $row["usu_ape"];
                     $output["usu_correo"] = $row["usu_correo"];
-                    $output["usu_pass"] = $row["usu_pass"];
+                    /* Decifrar el password para mostrarlo en la ventana de editar */
+                    $iv_dec = substr(base64_decode($row["usu_pass"]),0,openssl_cipher_iv_length($cipher));
+                    $cifradoSinIV = substr(base64_decode($row["usu_pass"]), openssl_cipher_iv_length($cipher));
+                    $decifrado = openssl_decrypt($cifradoSinIV,$cipher,$key, OPENSSL_RAW_DATA,$iv_dec);
+
+                    $output["usu_pass"] = $decifrado;
                     $output["rol_id"] = $row["rol_id"];
                 }
                 echo json_encode($output);
@@ -114,7 +123,10 @@
 
         /* Cambiar password del usuario */
         case "password":
-            $usuario->update_usuario_pass($_POST["usu_id"], $_POST["usu_pass"]);
+            $cifrado = openssl_encrypt($_POST["usu_pass"],$cipher,$key, OPENSSL_RAW_DATA,$iv);
+            $textoCifrado  = base64_encode($iv . $cifrado);
+
+            $usuario->update_usuario_pass($_POST["usu_id"], $textoCifrado);
         break;
     }
 ?>

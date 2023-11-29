@@ -16,7 +16,6 @@ function guardaryeditar(e){
         contentType: false,
         processData: false,
         success: function(datos){    
-            console.log(datos);
             $('#usuario_form')[0].reset(); /* Reiniciar formulario */
             $("#modalmantenimiento").modal('hide'); /* Ocultar formulario */
             $('#usuario_data').DataTable().ajax.reload(); /* Recargar Data Table */

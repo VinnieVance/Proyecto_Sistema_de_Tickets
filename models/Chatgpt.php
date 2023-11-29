@@ -11,7 +11,7 @@
                 $tick_descrip = $row["tick_descrip"];
             }
 
-            $apikey = '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';
+            $apikey = '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';
 
 
             $data = [

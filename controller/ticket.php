@@ -8,6 +8,11 @@
 
     require_once("../models/Documento.php");
     $documento = new Documento();
+    /* Variables para OpenSSL */
+    $key = "ll4v#s7St3m45ioC0%$";
+    $cipher="aes-256-cbc";
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($cipher));
+
     //insertar datos del ticket en la tabla tm_ticket
     switch($_GET["op"]){
 
@@ -94,8 +99,11 @@
                         $sub_array[] = '<span class="label label-pill label-success">'. $row1["usu_nom"].'</span>';
                     }
                 }
+                
+                $cifrado = openssl_encrypt($row["tick_id"],$cipher,$key, OPENSSL_RAW_DATA,$iv);
+                $textoCifrado  = base64_encode($iv . $cifrado);
 
-                $sub_array[] = '<button type="button" onClick="ver('.$row["tick_id"].');" id="'.$row["tick_id"].'" class="btn btn-inline btn-info btn-sm ladda-button"><div><i class="fa fa-eye"></i></div></button>';
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-info btn-sm ladda-button"><div><i class="fa fa-eye"></i></div></button>';
                 $data[] = $sub_array;
             }
             $results =  array(
@@ -195,7 +203,10 @@
                     }
                 }
 
-                $sub_array[] = '<button type="button" onClick="ver('.$row["tick_id"].');" id="'.$row["tick_id"].'" class="btn btn-inline btn-info btn-sm ladda-button"><div><i class="fa fa-eye"></i></div></button>';
+                $cifrado = openssl_encrypt($row["tick_id"],$cipher,$key, OPENSSL_RAW_DATA,$iv);
+                $textoCifrado  = base64_encode($iv . $cifrado);
+
+                $sub_array[] = '<button type="button" data-ciphertext="'.$textoCifrado.'" id="'.$textoCifrado.'" class="btn btn-inline btn-info btn-sm ladda-button"><div><i class="fa fa-eye"></i></div></button>';
                 $data[] = $sub_array;
             }
             $results =  array(
@@ -207,7 +218,12 @@
         break;
 
         case "listardetalle":
-            $datos=$ticket->listar_ticketdetalle_x_ticket($_POST["tick_id"]);
+
+            $iv_dec = substr(base64_decode($_POST["tick_id"]),0,openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["tick_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV,$cipher,$key, OPENSSL_RAW_DATA,$iv_dec);
+            
+            $datos=$ticket->listar_ticketdetalle_x_ticket($decifrado);
             ?>
                 <?php
                     foreach($datos as $row){
@@ -291,7 +307,12 @@
         break;
 
         case "mostrar";
-            $datos=$ticket->listar_ticket_x_id($_POST["tick_id"]);  
+            
+            $iv_dec = substr(base64_decode($_POST["tick_id"]),0,openssl_cipher_iv_length($cipher));
+            $cifradoSinIV = substr(base64_decode($_POST["tick_id"]), openssl_cipher_iv_length($cipher));
+            $decifrado = openssl_decrypt($cifradoSinIV,$cipher,$key, OPENSSL_RAW_DATA,$iv_dec);
+        
+            $datos=$ticket->listar_ticket_x_id($decifrado);  
             if(is_array($datos)==true and count($datos)>0){
                 foreach($datos as $row)
                 {
