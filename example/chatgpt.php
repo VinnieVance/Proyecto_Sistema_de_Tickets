@@ -1,5 +1,5 @@
 <?php
-    $apikey = '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';
+    $apikey = 'OpenAI API KEY HERE';
 
 
     $data = [
@@ -23,8 +23,8 @@
     $response = curl_exec($ch);
     $responseArr = json_decode($response, true);
 
-    /* print($response); */
+    print($response);
 
-    echo $responseArr['choices'][0]['text'];
+    /* echo $responseArr['choices'][0]['text']; */
 
 ?>
