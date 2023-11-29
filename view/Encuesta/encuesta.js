@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 function listardetalle(tick_id){
 
-    $.post("../../controller/ticket.php?op=mostrar", { tick_id : tick_id }, function (data) {
+    $.post("../../controller/ticket.php?op=mostrar_sin_encriptar", { tick_id : tick_id }, function (data) {
         data = JSON.parse(data);
         $('#lblestado').val(data.tick_estado_texto);
         $('#lblnomusuario').val(data.usu_nom +' '+data.usu_ape);

@@ -227,7 +227,7 @@
                 SET
                     tick_estado = 'Cerrado',
                     fech_cierre = now()
-                where
+                WHERE
                     tick_id = ?";
             $sql=$conectar->prepare($sql);
             $sql->bindValue(1, $tick_id);
