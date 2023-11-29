@@ -7,6 +7,7 @@
     /* llamada de las clases necesarias que se usaran en el envio del mail */
     require_once("../config/conexion.php");
     require_once("../models/Ticket.php");
+    require_once("../Models/Usuario.php");
 
     class Email extends PHPMailer{
 
@@ -36,7 +37,7 @@
 
             $this->CharSet = 'UTF8';
             $this->addAddress($correo);
-            $this->addAddress($_SESSION["usu_email"]);
+            $this->addAddress($_SESSION["correo"]);
             $this->IsHTML(true);
             $this->Subject = "Ticket Abierto";
             //Igual//
@@ -83,7 +84,7 @@
 
             $this->CharSet = 'UTF8';
             $this->addAddress($correo);
-            $this->addAddress($_SESSION["usu_email"]);
+            $this->addAddress($_SESSION["usu_correo"]);
             $this->IsHTML(true);
             $this->Subject = "Ticket Cerrado";
             //Igual//
@@ -128,7 +129,7 @@
             $this->setFrom($this->gCorreo, "Ticket Asignado ".$id);
             $this->CharSet = 'UTF8';
             $this->addAddress($correo);
-            $this->addAddress($_SESSION["usu_email"]);
+            $this->addAddress($_SESSION["usu_correo"]);
             $this->IsHTML(true);
             $this->Subject = "Ticket Asignado";
             //Igual//
@@ -148,6 +149,54 @@
             } catch(Exception $e){
                 return false;
             }
+        }
+        /* Funcion para recuperar contraseña por email */
+        public function recuperar_contrasenna($usu_correo){
+            $usuario = new Usuario();
+
+            $usuario->get_cambiar_contra_recuperar($usu_correo);
+
+            $datos = $usuario->get_usuario_x_correo($usu_correo);
+            foreach ($datos as $row){
+                $usu_id = $row["usu_id"];
+                $usu_ape = $row["usu_ape"];
+                $usu_nom = $row["usu_nom"];
+                $correo = $row["usu_correo"];
+                $usu_pass= $row["usu_pass"];
+            }
+
+            $this->IsSMTP();
+            $this->Host = 'smtp.office365.com'; //Aquí el server
+            $this->Port = 587; //Aquí el puerto
+            $this->SMTPAuth = true;
+            $this->SMTPSecure = 'tls';
+
+            $this->Username = $this->gCorreo;
+            $this->Password = $this->gContrasena;
+            $this->setFrom($this->gCorreo, "Recuperar Contraseña");
+
+            $this->CharSet = 'UTF8';
+            $this->addAddress($correo);
+            $this->IsHTML(true);
+            $this->Subject = "Recuperar Contraseña";
+            //Igual//
+            $cuerpo = file_get_contents('../public/RecuperarContra.html'); /* Ruta del template en formato HTML */
+            /* parametros del template a remplazar */
+            $cuerpo = str_replace("xusunom", $usu_nom, $cuerpo);
+            $cuerpo = str_replace("xusuape", $usu_ape, $cuerpo);
+            $cuerpo = str_replace("xnuevopass", $usu_pass, $cuerpo);
+
+            $this->Body = $cuerpo;
+            $this->AltBody = strip_tags("Recuperar Contraseña");
+
+            try{
+                $this->Send();
+                $usuario->encriptar_nueva_contra($usu_id,$usu_pass);
+                return true;
+            } catch(Exception $e){
+                return false;
+            }
+
         }
     }
 

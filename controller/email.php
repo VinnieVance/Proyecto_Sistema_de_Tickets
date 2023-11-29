@@ -26,5 +26,9 @@
         case "ticket_asignado":
             $email->ticket_asignado($_POST["tick_id"]);
             break;
+        
+        case "recuperar_contra":
+            $email->recuperar_contrasenna($_POST["usu_correo"]);
+            break;
     }
 ?>
