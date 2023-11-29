@@ -34,6 +34,22 @@ $(document).ready(function(){
                 barColors: ["#1AB244"], 
             });
         }); 
+
+        $('#idcalendar').fullCalendar({
+            lang:'es',
+            header:{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,basicWeek,basicDay'  
+            },
+            defaultView:'month',
+            events:{
+                url:'../../controller/ticket.php?op=usu_calendar',
+                method:'POST',
+                data:{usu_id:usu_id}
+            }
+        });
+        
     /* Si es soporte, devuelve todos los tickets en el sistema */
     } else {
         $.post("../../controller/ticket.php?op=total", function (data) {
@@ -62,6 +78,19 @@ $(document).ready(function(){
                 labels: ['Value']
             });
         }); 
+
+        $('#idcalendar').fullCalendar({
+            lang:'es',
+            header:{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,basicWeek,basicDay'  
+            },
+            defaultView:'month',
+            events:{
+                url:'../../controller/ticket.php?op=all_calendar'
+            }
+        });
     }
 
 
