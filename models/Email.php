@@ -11,8 +11,8 @@
 
     class Email extends PHPMailer{
 
-        protected $gCorreo = 'acorteg001@alumno.uaemex.mx';
-        protected $gContrasena = 'Gxm51ngpL8b';
+        protected $gCorreo = '@YourEmail';
+        protected $gContrasena = '@YourPass';
         /* Funcion para enviar alerta de ticket abierto por email */
         public function ticket_abierto($tick_id){
             $ticket = new Ticket();
